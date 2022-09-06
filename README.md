@@ -4,6 +4,7 @@ Pytorch - 구현 완료
 Tensorflow - 추후 작업 예정   
 
 # Papaer
+Attention Is All You Need
 https://arxiv.org/pdf/1706.03762v5.pdf
 
 # 파일 설명
