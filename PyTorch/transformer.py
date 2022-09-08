@@ -69,7 +69,7 @@ class ScaledDotProductAttention(nn.Module):
 
         scores = torch.matmul(query, key.transpose(-2, -1)) / self.scale # [bs, num_heads, query_len, key_len]
         
-        scores.masked_fill_(attn_mask, -1e9)
+        scores.masked_fill_(attn_mask, -1e4)
         
         attn_prob = nn.Softmax(dim=-1)(scores)
         # 성능 관련 실험 필요. 허깅페이스에서는 dropout 사용함
