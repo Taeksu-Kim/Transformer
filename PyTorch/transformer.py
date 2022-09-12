@@ -230,6 +230,29 @@ class Transformer(nn.Module):
         if config.use_decoder == True:
             self.decoder = TransformerDecoder(config)
             self.fc = nn.Linear(config.d_model, config.vocab_size)
+        
+        self.init_weights()
+
+    def init_weights(self):
+        # Initialize weights for each layer
+        self.apply(self.init_layer_weights)
+
+    # ref huggingface
+    # https://huggingface.co/transformers/v4.9.2/_modules/transformers/models/electra/modeling_electra.html#ElectraPreTrainedModel
+    def init_layer_weights(self, module):
+        if isinstance(module, nn.Linear):
+            module.weight.data.normal_(mean=0.0, std=self.config.init_std)
+            if module.bias is not None:
+                module.bias.data.zero_()
+        elif isinstance(module, nn.Embedding):
+            module.weight.data.normal_(mean=0.0, std=self.config.init_std)
+            if module.padding_idx is not None:
+                module.weight.data[module.padding_idx].zero_()
+        elif isinstance(module, nn.LayerNorm):
+            module.bias.data.zero_()
+            module.weight.data.fill_(1.0)
+            module.eps = self.config.norm_eps
+
     def forward(self, 
                 enc_inputs, 
                 dec_inputs=None, 
