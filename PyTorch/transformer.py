@@ -229,7 +229,6 @@ class Transformer(nn.Module):
         self.encoder = TransformerEncoder(config)
         if config.use_decoder == True:
             self.decoder = TransformerDecoder(config)
-            self.fc = nn.Linear(config.d_model, config.vocab_size)
         
         self.init_weights()
 
@@ -273,7 +272,4 @@ class Transformer(nn.Module):
                                                                               enc_outputs, 
                                                                               enc_inputs)
         
-        return {'decoder_hidden_states' : dec_outputs, 
-                'encoder_self_attention_prob' : enc_self_attn_probs, 
-                'decoder_self_attention_prob' : dec_self_attn_probs, 
-                'decoder_cross_attention_prob' : dec_cross_attn_probs}
+        return dec_outputs, enc_self_attn_probs, dec_self_attn_probs, dec_cross_attn_probs
