@@ -265,8 +265,7 @@ class Transformer(nn.Module):
         enc_outputs, enc_self_attn_probs = self.encoder(enc_inputs, enc_self_attn_mask)
         
         if self.config.use_decoder == False:
-            return {'encoder_hidden_states' : enc_outputs, 
-                    'encoder_self_attention_prob' : enc_self_attn_probs}
+            return enc_outputs, enc_self_attn_probs
         
         dec_outputs, dec_self_attn_probs, dec_cross_attn_probs = self.decoder(dec_inputs,
                                                                               enc_outputs, 
