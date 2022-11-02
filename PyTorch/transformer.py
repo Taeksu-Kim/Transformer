@@ -16,8 +16,8 @@ def PositionalEncoding(max_seq_len, d_model):
     
     return pe
 
-def get_attn_pad_mask(key_inputs, pad_id, query_len):
-    return key_inputs.eq(pad_id).unsqueeze(1).expand(-1, query_len, -1) # [bs, query_len, key_len]
+def get_attn_pad_mask(key_inputs, pad_id, query_len):                   # self_attention : [bs, query_len, query_len]
+    return key_inputs.eq(pad_id).unsqueeze(1).expand(-1, query_len, -1) # cross_attention : [bs, query_len, key_len]
 
 # decoder mask for the back of current positions. shape of attention matrix
 # it's used for decoder self attention.
