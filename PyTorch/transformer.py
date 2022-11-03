@@ -261,6 +261,9 @@ class Transformer(nn.Module):
         
         if enc_self_attn_mask == None:
             enc_self_attn_mask = get_attn_pad_mask(enc_inputs, self.config.pad_id, enc_inputs.size(1))
+            
+        else:
+            enc_self_attn_mask = get_attn_pad_mask(enc_self_attn_mask, 0, enc_self_attn_mask.size(1))
 
         enc_outputs, enc_self_attn_probs = self.encoder(enc_inputs, enc_self_attn_mask)
         
