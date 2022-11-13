@@ -118,7 +118,7 @@ class TransformerEncoder(nn.Module):
             [TransformerEncoderLayer(config) for _ in range(config.num_enc_layers)]
         )
 
-    def forward(self, enc_inputs, self_attn_mask):
+    def forward(self, enc_inputs, self_attn_mask=None):
         outputs = self.word_embedding(enc_inputs) * self.sqrt_dim + self.pos_encoding.to(enc_inputs.device)
 
         if self_attn_mask == None:
