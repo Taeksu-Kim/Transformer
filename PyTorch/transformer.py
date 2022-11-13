@@ -120,7 +120,13 @@ class TransformerEncoder(nn.Module):
 
     def forward(self, enc_inputs, self_attn_mask):
         outputs = self.word_embedding(enc_inputs) * self.sqrt_dim + self.pos_encoding.to(enc_inputs.device)
-        
+
+        if self_attn_mask == None:
+            self_attn_mask = get_attn_pad_mask(enc_inputs, self.config.pad_id, enc_inputs.size(1))
+            
+        else:
+            self_attn_mask = get_attn_pad_mask(self_attn_mask, 0, self_attn_mask.size(1))
+
         self_attn_probs = []
         for layer in self.layers:
             outputs, self_attn_prob = layer(outputs, self_attn_mask)
@@ -259,12 +265,6 @@ class Transformer(nn.Module):
                 dec_self_attn_mask=None,
                 dec_cross_attn_mask=None):
         
-        if enc_self_attn_mask == None:
-            enc_self_attn_mask = get_attn_pad_mask(enc_inputs, self.config.pad_id, enc_inputs.size(1))
-            
-        else:
-            enc_self_attn_mask = get_attn_pad_mask(enc_self_attn_mask, 0, enc_self_attn_mask.size(1))
-
         enc_outputs, enc_self_attn_probs = self.encoder(enc_inputs, enc_self_attn_mask)
         
         if self.config.use_decoder == False:
